@@ -24,6 +24,7 @@
       height: 100%;
       object-fit: cover;
       user-select: none;
+      touch-action: manipulation;
     }
   </style>
 </head>
@@ -41,15 +42,24 @@
 
     let isWaiting = false;
 
-    document.getElementById("app").addEventListener("click", function (e) {
+    function handleTap(tapY) {
       if (isWaiting) return;
-      const tapY = e.clientY;
       const screenHeight = window.innerHeight;
 
       if (tapY < screenHeight / 2) {
         trigger("topTap.png", topSound, 3000);
       } else {
         trigger("bottomTap.png", bottomSound, 2000);
+      }
+    }
+
+    document.getElementById("app").addEventListener("click", function (e) {
+      handleTap(e.clientY);
+    });
+
+    document.getElementById("app").addEventListener("touchstart", function (e) {
+      if (e.touches.length > 0) {
+        handleTap(e.touches[0].clientY);
       }
     });
 
