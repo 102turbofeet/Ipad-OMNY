@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tap App</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: black;
+    }
+    #app {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <img id="mainImage" src="home.png" alt="Home Image" />
+  </div>
+  <audio id="topSound" src="topSound.m4a"></audio>
+  <audio id="bottomSound" src="bottomSound.m4a"></audio>
+
+  <script>
+    const img = document.getElementById("mainImage");
+    const topSound = document.getElementById("topSound");
+    const bottomSound = document.getElementById("bottomSound");
+
+    let isWaiting = false;
+
+    document.getElementById("app").addEventListener("click", function (e) {
+      if (isWaiting) return;
+      const tapY = e.clientY;
+      const screenHeight = window.innerHeight;
+
+      if (tapY < screenHeight / 2) {
+        trigger("topTap.png", topSound, 3000);
+      } else {
+        trigger("bottomTap.png", bottomSound, 2000);
+      }
+    });
+
+    function trigger(imageName, sound, duration) {
+      isWaiting = true;
+      img.src = imageName;
+      sound.currentTime = 0;
+      sound.play();
+      setTimeout(() => {
+        img.src = "home.png";
+        isWaiting = false;
+      }, duration);
+    }
+  </script>
+</body>
+</html>
